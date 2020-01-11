@@ -51,8 +51,11 @@ macro_rules! get_pm_test {
     };
 }
 
-get_pm_test!(pm_all_normal, 0b0001_0101, Normal, Normal, Normal);
-get_pm_test!(pm_all_suspend, 0, Suspend, Suspend, Suspend);
-get_pm_test!(accel_lp, 0b0010_0101, LowPower, Normal, Normal);
-get_pm_test!(gyro_fast_start, 0b0001_1101, Normal, FastStartUp, Normal);
-get_pm_test!(magnet_lp, 0b0001_0110, Normal, Normal, LowPower);
+mod pmu {
+    use super::*;
+    get_pm_test!(pm_all_normal, 0b0001_0101, Normal, Normal, Normal);
+    get_pm_test!(pm_all_suspend, 0, Suspend, Suspend, Suspend);
+    get_pm_test!(accel_lp, 0b0010_0101, LowPower, Normal, Normal);
+    get_pm_test!(gyro_fast_start, 0b0001_1101, Normal, FastStartUp, Normal);
+    get_pm_test!(magnet_lp, 0b0001_0110, Normal, Normal, LowPower);
+}

@@ -52,3 +52,22 @@ pub enum MagnetometerPowerMode {
     /// Low power mode
     LowPower,
 }
+
+/// Sensor status flags
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Status {
+    /// Accelerometer has data ready
+    pub accel_data_ready: bool,
+    /// Gyroscope has data ready
+    pub gyro_data_ready: bool,
+    /// Magnetometer has data ready
+    pub magnet_data_ready: bool,
+    /// NVM controller ready
+    pub nvm_ready: bool,
+    /// Fast offset compensation (FOC) completed
+    pub foc_ready: bool,
+    /// Manual magnetometer operation
+    pub magnet_manual_op: bool,
+    /// Gyroscope self-test completed successfully
+    pub gyro_self_test_ok: bool,
+}

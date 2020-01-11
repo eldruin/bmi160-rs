@@ -1,7 +1,7 @@
 use crate::{
     interface::{I2cInterface, ReadData, SpiInterface, WriteData},
-    AccelerometerPowerMode, Bmi160, Error, GyroscopePowerMode, MagnetometerPowerMode, Register,
-    SensorPowerMode, SlaveAddr,
+    AccelerometerPowerMode, BitFlags, Bmi160, Error, GyroscopePowerMode, MagnetometerPowerMode,
+    Register, SensorPowerMode, SlaveAddr, Status,
 };
 
 impl<I2C> Bmi160<I2cInterface<I2C>> {
@@ -69,6 +69,20 @@ where
             accel,
             gyro,
             magnet,
+        })
+    }
+
+    /// Get sensor status
+    pub fn status(&mut self) -> Result<Status, Error<CommE, PinE>> {
+        let status = self.iface.read_register(Register::STATUS)?;
+        Ok(Status {
+            accel_data_ready: (status & BitFlags::DRDY_ACC) != 0,
+            gyro_data_ready: (status & BitFlags::DRDY_GYR) != 0,
+            magnet_data_ready: (status & BitFlags::DRDY_MAG) != 0,
+            nvm_ready: (status & BitFlags::NVM_RDY) != 0,
+            foc_ready: (status & BitFlags::FOC_RDY) != 0,
+            magnet_manual_op: (status & BitFlags::MAG_MAN_OP) != 0,
+            gyro_self_test_ok: (status & BitFlags::GYR_SELF_TEST_OK) != 0,
         })
     }
 }
