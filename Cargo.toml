@@ -1,0 +1,35 @@
+[package]
+name = "bmi160"
+version = "0.1.0"
+authors = ["Diego Barrios Romero <eldruin@gmail.com>"]
+repository = "https://github.com/eldruin/bmi160-rs"
+license = "MIT OR Apache-2.0"
+description = "Platform-agnostic Rust driver for the BMI160 inertial measurement unit (IMU)."
+readme = "README.md"
+keywords = ["inertial", "accelerometer", "gyroscope", "imu", "embedded-hal-driver"]
+categories = ["embedded", "hardware-support", "no-std"]
+homepage = "https://github.com/eldruin/bmi160-rs"
+documentation = "https://docs.rs/bmi160"
+include = [
+    "/**/*.rs",
+    "/Cargo.toml",
+    "/README.md",
+    "/CHANGELOG.md",
+    "/LICENSE-MIT",
+    "/LICENSE-APACHE",
+]
+edition = "2018"
+
+[badges]
+travis-ci = { repository = "eldruin/bmi160-rs", branch = "master" }
+coveralls = { repository = "eldruin/bmi160-rs", branch = "master", service = "github" }
+
+[dependencies]
+embedded-hal = "0.2.3"
+
+[dev-dependencies]
+linux-embedded-hal = "0.2"
+embedded-hal-mock = "0.7"
+
+[profile.release]
+lto = true
