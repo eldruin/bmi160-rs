@@ -5,6 +5,14 @@ use embedded_hal_mock::{
     spi::{Mock as SpiMock, Transaction as SpiTrans},
 };
 
+pub struct Register;
+impl Register {
+    pub const CHIPID: u8 = 0x00;
+    pub const PMU_STATUS: u8 = 0x03;
+}
+
+pub const DEV_ADDR: u8 = 0x68;
+
 pub fn default_cs() -> PinMock {
     PinMock::new(&[PinTrans::set(PinState::Low), PinTrans::set(PinState::High)])
 }
