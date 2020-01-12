@@ -5,11 +5,13 @@
 //!
 //! This driver allows you to:
 //! - Get the latest sensor data. See: [`data()`].
+//! - Set the accelerometer, gyroscope and magnetometer power mode. See: [`set_accel_power_mode()`].
 //! - Get the sensor status. See: [`status()`].
 //! - Get power mode. See: [`power_mode()`].
 //! - Get chip ID. See: [`chip_id()`].
 //!
 //! [`data()`]: struct.Bmi160.html#method.data
+//! [`set_accel_power_mode()`]: struct.Bmi160.html#method.set_accel_power_mode
 //! [`status()`]: struct.Bmi160.html#method.status
 //! [`power_mode()`]: struct.Bmi160.html#method.power_mode
 //! [`chip_id()`]: struct.Bmi160.html#method.chip_id
