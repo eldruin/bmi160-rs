@@ -111,4 +111,17 @@ where
         };
         self.iface.write_register(Register::CMD, cmd)
     }
+
+    /// Configure magnetometer power mode
+    pub fn set_magnet_power_mode(
+        &mut self,
+        mode: MagnetometerPowerMode,
+    ) -> Result<(), Error<CommE, PinE>> {
+        let cmd = match mode {
+            MagnetometerPowerMode::Suspend => 0b0001_1000,
+            MagnetometerPowerMode::Normal => 0b0001_1001,
+            MagnetometerPowerMode::LowPower => 0b0001_1010,
+        };
+        self.iface.write_register(Register::CMD, cmd)
+    }
 }

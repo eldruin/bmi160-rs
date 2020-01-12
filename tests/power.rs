@@ -73,3 +73,17 @@ macro_rules! set_gyro_pm_test {
 set_gyro_pm_test!(set_gyro_pm_susp, Suspend, 0b0001_0100);
 set_gyro_pm_test!(set_gyro_pm_norm, Normal, 0b0001_0101);
 set_gyro_pm_test!(set_gyro_pm_lowp, FastStartUp, 0b0001_0111);
+
+macro_rules! set_magnet_pm_test {
+    ($name:ident, $variant:ident, $cmd:expr) => {
+        set_pm_test!(
+            $name,
+            set_magnet_power_mode,
+            MagnetometerPowerMode::$variant,
+            $cmd
+        );
+    };
+}
+set_magnet_pm_test!(set_magnet_pm_susp, Suspend, 0b0001_1000);
+set_magnet_pm_test!(set_magnet_pm_norm, Normal, 0b0001_1001);
+set_magnet_pm_test!(set_magnet_pm_lowp, LowPower, 0b0001_1010);
