@@ -8,12 +8,12 @@
 //! - Get the sensor status. See: [`status()`].
 //! - Get power mode. See: [`power_mode()`].
 //! - Get chip ID. See: [`chip_id()`].
-//! 
+//!
 //! [`data()`]: struct.Bmi160.html#method.data
 //! [`status()`]: struct.Bmi160.html#method.status
 //! [`power_mode()`]: struct.Bmi160.html#method.power_mode
 //! [`chip_id()`]: struct.Bmi160.html#method.chip_id
-//! 
+//!
 //! <!-- TODO
 //! [Introductory blog post](TODO)
 //! -->
@@ -45,6 +45,44 @@
 //!
 //! [Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi160-ds000.pdf)
 //!
+//! ## Usage examples (see also examples folder)
+//!
+//! To use this driver, import this crate and an `embedded_hal` implementation,
+//! then create an instance of the driver either in I2C or SPI mode.
+//!
+//! Please find additional examples using hardware in this repository: [driver-examples]
+//!
+//! [driver-examples]: https://github.com/eldruin/driver-examples
+//!
+//! ### Create an instance of the driver in I2C mode and print the chip id
+//!
+//! ```no_run
+//! extern crate linux_embedded_hal as hal;
+//! use bmi160::{Bmi160, SlaveAddr};
+//!
+//! # fn main() {
+//! let dev = hal::I2cdev::new("/dev/i2c-1").unwrap();
+//! let address = SlaveAddr::default();
+//! let mut imu = Bmi160::new_with_i2c(dev, address);
+//! let id = imu.chip_id().unwrap_or(0);
+//! println!("Chip ID: {}", id);
+//! # }
+//! ```
+//!
+//! ### Create an instance of the driver in SPI mode and print the chip id
+//!
+//! ```no_run
+//! extern crate linux_embedded_hal as hal;
+//! use bmi160::Bmi160;
+//!
+//! # fn main() {
+//! let spi = Spidev::open("/dev/spidev0.0").unwrap();
+//! let chip_select = Pin::new(25);
+//! let mut imu = Bmi160::new_with_spi(spi, chip_select);
+//! let id = imu.chip_id().unwrap_or(0);
+//! println!("Chip ID: {}", id);
+//! # }
+//! ```
 
 #![deny(unsafe_code, missing_docs)]
 #![no_std]
