@@ -59,3 +59,17 @@ macro_rules! set_accel_pm_test {
 set_accel_pm_test!(set_accel_pm_susp, Suspend, 0b0001_0000);
 set_accel_pm_test!(set_accel_pm_norm, Normal, 0b0001_0001);
 set_accel_pm_test!(set_accel_pm_lowp, LowPower, 0b0001_0010);
+
+macro_rules! set_gyro_pm_test {
+    ($name:ident, $variant:ident, $cmd:expr) => {
+        set_pm_test!(
+            $name,
+            set_gyro_power_mode,
+            GyroscopePowerMode::$variant,
+            $cmd
+        );
+    };
+}
+set_gyro_pm_test!(set_gyro_pm_susp, Suspend, 0b0001_0100);
+set_gyro_pm_test!(set_gyro_pm_norm, Normal, 0b0001_0101);
+set_gyro_pm_test!(set_gyro_pm_lowp, FastStartUp, 0b0001_0111);

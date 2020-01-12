@@ -98,4 +98,17 @@ where
         };
         self.iface.write_register(Register::CMD, cmd)
     }
+
+    /// Configure gyroscope power mode
+    pub fn set_gyro_power_mode(
+        &mut self,
+        mode: GyroscopePowerMode,
+    ) -> Result<(), Error<CommE, PinE>> {
+        let cmd = match mode {
+            GyroscopePowerMode::Suspend => 0b0001_0100,
+            GyroscopePowerMode::Normal => 0b0001_0101,
+            GyroscopePowerMode::FastStartUp => 0b0001_0111,
+        };
+        self.iface.write_register(Register::CMD, cmd)
+    }
 }
