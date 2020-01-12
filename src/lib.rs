@@ -123,9 +123,9 @@ pub use crate::types::{
     AccelerometerPowerMode, Data, Error, GyroscopePowerMode, MagnetometerData,
     MagnetometerPowerMode, Sensor3DData, SensorPowerMode, SensorSelector, Status,
 };
-pub use interface::SlaveAddr;
+pub use crate::interface::SlaveAddr;
 mod register_address;
-use register_address::{BitFlags, Register};
+use crate::register_address::{BitFlags, Register};
 mod read_sensor_data;
 
 /// BMI160 device driver
