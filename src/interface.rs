@@ -1,7 +1,6 @@
 //! I2C/SPI interfaces
 
 use crate::{private, Error};
-use core::convert::From;
 use embedded_hal::{
     blocking::{i2c, spi},
     digital,
@@ -23,14 +22,29 @@ pub struct SpiInterface<SPI, CS> {
     pub(crate) cs: CS,
 }
 
-/// Possible slave addresses with value for SDO
+/// Possible slave addresses
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct SlaveAddr(pub bool);
+pub enum SlaveAddr {
+    /// Default slave address
+    Default,
+    /// Alternative slave address providing bit value for the SDO pin
+    Alternative(bool),
+}
 
 impl Default for SlaveAddr {
-    /// Default slave address (SDO pulled to GND)
+    /// Default slave address
     fn default() -> Self {
-        SlaveAddr(false)
+        SlaveAddr::Default
+    }
+}
+
+impl SlaveAddr {
+    pub(crate) fn addr(self) -> u8 {
+        match self {
+            SlaveAddr::Default => I2C_DEV_BASE_ADDR,
+            SlaveAddr::Alternative(false) => I2C_DEV_BASE_ADDR,
+            SlaveAddr::Alternative(true) => I2C_DEV_BASE_ADDR | 1,
+        }
     }
 }
 
@@ -143,12 +157,6 @@ where
     }
 }
 
-impl From<SlaveAddr> for u8 {
-    fn from(addr: SlaveAddr) -> Self {
-        I2C_DEV_BASE_ADDR | addr.0 as u8
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::SlaveAddr;
@@ -157,12 +165,12 @@ mod tests {
     #[test]
     fn can_get_default_address() {
         let addr = SlaveAddr::default();
-        assert_eq!(ADDR, addr.into());
+        assert_eq!(ADDR, addr.addr());
     }
 
     #[test]
     fn can_generate_alternative_addresses() {
-        assert_eq!(ADDR, SlaveAddr(false).into());
-        assert_eq!(ADDR | 1, SlaveAddr(true).into());
+        assert_eq!(ADDR, SlaveAddr::Alternative(false).addr());
+        assert_eq!(ADDR | 1, SlaveAddr::Alternative(true).addr());
     }
 }

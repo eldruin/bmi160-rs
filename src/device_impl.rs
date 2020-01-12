@@ -10,7 +10,7 @@ impl<I2C> Bmi160<I2cInterface<I2C>> {
         Bmi160 {
             iface: I2cInterface {
                 i2c,
-                address: address.into(),
+                address: address.addr(),
             },
         }
     }
