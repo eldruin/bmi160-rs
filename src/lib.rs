@@ -78,8 +78,8 @@
 //! use bmi160::Bmi160;
 //!
 //! # fn main() {
-//! let spi = Spidev::open("/dev/spidev0.0").unwrap();
-//! let chip_select = Pin::new(25);
+//! let spi = hal::Spidev::open("/dev/spidev0.0").unwrap();
+//! let chip_select = hal::Pin::new(25);
 //! let mut imu = Bmi160::new_with_spi(spi, chip_select);
 //! let id = imu.chip_id().unwrap_or(0);
 //! println!("Chip ID: {}", id);
