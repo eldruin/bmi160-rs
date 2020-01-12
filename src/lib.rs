@@ -3,9 +3,17 @@
 //!
 //! [`embedded-hal`]: https://github.com/rust-embedded/embedded-hal
 //!
-//! <!--TODO
 //! This driver allows you to:
-//! -->
+//! - Get the latest sensor data. See: [`data()`].
+//! - Get the sensor status. See: [`status()`].
+//! - Get power mode. See: [`power_mode()`].
+//! - Get chip ID. See: [`chip_id()`].
+//! 
+//! [`data()`]: struct.Bmi160.html#method.data
+//! [`status()`]: struct.Bmi160.html#method.status
+//! [`power_mode()`]: struct.Bmi160.html#method.power_mode
+//! [`chip_id()`]: struct.Bmi160.html#method.chip_id
+//! 
 //! <!-- TODO
 //! [Introductory blog post](TODO)
 //! -->

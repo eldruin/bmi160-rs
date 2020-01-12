@@ -10,9 +10,12 @@
 This is a platform agnostic Rust driver for the BMI160 small, low-power
 inertial measurement unit using the [`embedded-hal`] traits.
 
-<!--TODO
 This driver allows you to:
--->
+- Get the latest sensor data. See: `data()`.
+- Get the sensor status. See: `status()`.
+- Get power mode. See: `power_mode()`.
+- Get chip ID. See: `chip_id()`.
+
 <!-- TODO
 [Introductory blog post]()
 -->
