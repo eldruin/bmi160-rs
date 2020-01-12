@@ -85,4 +85,17 @@ where
             gyro_self_test_ok: (status & BitFlags::GYR_SELF_TEST_OK) != 0,
         })
     }
+
+    /// Configure accelerometer power mode
+    pub fn set_accel_power_mode(
+        &mut self,
+        mode: AccelerometerPowerMode,
+    ) -> Result<(), Error<CommE, PinE>> {
+        let cmd = match mode {
+            AccelerometerPowerMode::Suspend => 0b0001_0000,
+            AccelerometerPowerMode::Normal => 0b0001_0001,
+            AccelerometerPowerMode::LowPower => 0b0001_0010,
+        };
+        self.iface.write_register(Register::CMD, cmd)
+    }
 }

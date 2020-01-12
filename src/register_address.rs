@@ -7,6 +7,7 @@ impl Register {
     pub const GYR: u8 = 0x0C;
     pub const ACC: u8 = 0x12;
     pub const SENSORTIME: u8 = 0x18;
+    pub const CMD: u8 = 0x7E;
 }
 
 pub struct BitFlags;
