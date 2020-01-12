@@ -10,6 +10,9 @@ pub struct Register;
 impl Register {
     pub const CHIPID: u8 = 0x00;
     pub const PMU_STATUS: u8 = 0x03;
+    pub const MAG: u8 = 0x04;
+    pub const GYR: u8 = 0x0C;
+    pub const ACC: u8 = 0x12;
     pub const STATUS: u8 = 0x1B;
 }
 

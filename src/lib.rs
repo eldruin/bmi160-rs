@@ -45,12 +45,13 @@ mod device_impl;
 pub mod interface;
 mod types;
 pub use crate::types::{
-    AccelerometerPowerMode, Error, GyroscopePowerMode, MagnetometerPowerMode, SensorPowerMode,
-    Status,
+    AccelerometerPowerMode, Data, Error, GyroscopePowerMode, MagnetometerData,
+    MagnetometerPowerMode, Sensor3DData, SensorPowerMode, SensorSelector, Status,
 };
 pub use interface::SlaveAddr;
 mod register_address;
 use register_address::{BitFlags, Register};
+mod read_sensor_data;
 
 /// BMI160 device driver
 #[derive(Debug)]
