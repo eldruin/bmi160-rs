@@ -1,9 +1,7 @@
 # Rust BMI160 Inertial Measurement Unit Driver
 
-<!-- TODO
 [![crates.io](https://img.shields.io/crates/v/bmi160.svg)](https://crates.io/crates/bmi160)
 [![Docs](https://docs.rs/bmi160/badge.svg)](https://docs.rs/bmi160)
--->
 [![Build Status](https://travis-ci.com/eldruin/bmi160-rs.svg?branch=master)](https://travis-ci.com/eldruin/bmi160-rs)
 [![Coverage Status](https://coveralls.io/repos/github/eldruin/bmi160-rs/badge.svg?branch=master)](https://coveralls.io/github/eldruin/bmi160-rs?branch=master)
 
