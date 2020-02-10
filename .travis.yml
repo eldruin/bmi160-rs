@@ -21,6 +21,9 @@ matrix:
             - libdw-dev
             - binutils-dev
             - cmake
+            - libssl-dev
+            - pkg-config
+            - zlib1g-dev
           sources:
             - kalakris-cmake
 
