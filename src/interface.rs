@@ -40,7 +40,7 @@ impl Default for SlaveAddr {
 
 impl SlaveAddr {
     /// The numerical address of the `SlaveAddr`
-    pub const fn addr(self) -> u8 {
+    pub  fn addr(self) -> u8 {
         match self {
             SlaveAddr::Default => I2C_DEV_BASE_ADDR,
             SlaveAddr::Alternative(false) => I2C_DEV_BASE_ADDR,
