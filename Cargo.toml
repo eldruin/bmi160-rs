@@ -20,9 +20,6 @@ include = [
 ]
 edition = "2018"
 
-[badges]
-coveralls = { repository = "eldruin/bmi160-rs", branch = "master", service = "github" }
-
 [dependencies]
 embedded-hal = "0.2.3"
 
