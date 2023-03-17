@@ -2,6 +2,7 @@
 
 [![crates.io](https://img.shields.io/crates/v/bmi160.svg)](https://crates.io/crates/bmi160)
 [![Docs](https://docs.rs/bmi160/badge.svg)](https://docs.rs/bmi160)
+![MSRV](https://img.shields.io/badge/rustc-1.62+-blue.svg)
 [![Build Status](https://github.com/eldruin/bmi160-rs/workflows/Build/badge.svg)](https://github.com/eldruin/bmi160-rs/actions?query=workflow%3ABuild)
 [![Coverage Status](https://coveralls.io/repos/github/eldruin/bmi160-rs/badge.svg?branch=master)](https://coveralls.io/github/eldruin/bmi160-rs?branch=master)
 
@@ -76,6 +77,11 @@ fn main() {
     }
 }
 ```
+
+## Minimum Supported Rust Version (MSRV)
+
+This crate is guaranteed to compile on stable Rust 1.62 and up. It *might*
+compile with older versions but that may change in any new patch release.
 
 ## Support
 
