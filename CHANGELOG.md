@@ -7,12 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+...
+
+## [0.1.1] - 2023-03-17
+
 ### Changed
-- Updated MSRV to version 1.62.0
+- Make `SlaveAddr::addr` public.
+- Updated MSRV to version 1.62.0.
 
 ## [0.1.0] - 2020-02-08
 
 Initial release to crates.io.
 
-[Unreleased]: https://github.com/eldruin/bmi160-rs/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/eldruin/bmi160-rs/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/eldruin/bmi160-rs/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/eldruin/bmi160-rs/releases/tag/v0.1.0
