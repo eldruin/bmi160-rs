@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-...
+### Fixed
+- Device communication when using SPI.
 
 ## [0.1.1] - 2023-03-17
 

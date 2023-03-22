@@ -85,7 +85,7 @@ where
     fn write_register(&mut self, register: u8, data: u8) -> Result<(), Self::Error> {
         self.cs.set_low().map_err(Error::Pin)?;
 
-        let payload: [u8; 2] = [register + 0x80, data];
+        let payload: [u8; 2] = [register, data];
         let result = self.spi.write(&payload).map_err(Error::Comm);
 
         self.cs.set_high().map_err(Error::Pin)?;
@@ -94,7 +94,6 @@ where
 
     fn write_data(&mut self, payload: &mut [u8]) -> Result<(), Self::Error> {
         self.cs.set_low().map_err(Error::Pin)?;
-        payload[0] += 0x80;
         let result = self.spi.write(payload).map_err(Error::Comm);
 
         self.cs.set_high().map_err(Error::Pin)?;
@@ -143,7 +142,7 @@ where
     type Error = Error<CommE, PinE>;
     fn read_register(&mut self, register: u8) -> Result<u8, Self::Error> {
         self.cs.set_low().map_err(Error::Pin)?;
-        let mut data = [register, 0];
+        let mut data = [register + 0x80, 0];
         let result = self.spi.transfer(&mut data).map_err(Error::Comm);
         self.cs.set_high().map_err(Error::Pin)?;
         Ok(result?[1])
@@ -151,6 +150,7 @@ where
 
     fn read_data(&mut self, payload: &mut [u8]) -> Result<(), Self::Error> {
         self.cs.set_low().map_err(Error::Pin)?;
+        payload[0] += 0x80;
         let result = self.spi.transfer(payload).map_err(Error::Comm);
         self.cs.set_high().map_err(Error::Pin)?;
         result?;
