@@ -1,8 +1,8 @@
 use crate::{
     interface::{I2cInterface, ReadData, SpiInterface, WriteData},
-    types::AccelerometerRange,
-    AccelerometerPowerMode, BitFlags, Bmi160, Error, GyroscopePowerMode, MagnetometerPowerMode,
-    Register, SensorPowerMode, SlaveAddr, Status,
+    AccelerometerRange,
+    AccelerometerPowerMode, BitFlags, Bmi160, Error, GyroscopePowerMode,
+    MagnetometerPowerMode, Register, SensorPowerMode, SlaveAddr, Status,
 };
 
 impl<I2C> Bmi160<I2cInterface<I2C>> {

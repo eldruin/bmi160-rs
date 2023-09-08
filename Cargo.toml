@@ -29,3 +29,8 @@ embedded-hal-mock = "0.9"
 
 [profile.release]
 lto = true
+
+[features]
+# Enable scaled values depending on the
+# ranges, as f32
+scaled_data = []

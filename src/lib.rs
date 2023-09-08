@@ -119,6 +119,9 @@
 mod device_impl;
 pub mod interface;
 mod types;
+#[cfg(feature = "scaled_data")]
+mod scaling;
+
 pub use crate::interface::SlaveAddr;
 pub use crate::types::{
     AccelerometerPowerMode, AccelerometerRange, Data, Error, GyroscopePowerMode, MagnetometerData,

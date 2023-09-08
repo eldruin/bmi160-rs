@@ -3,6 +3,9 @@ use crate::{
     Bmi160, Data, Error, MagnetometerData, Register, Sensor3DData, SensorSelector,
 };
 
+#[cfg(feature = "scaled_data")]
+use crate::scaling::{DataScaled, Sensor3DDataScaled};
+
 impl<DI, CommE, PinE> Bmi160<DI>
 where
     DI: ReadData<Error = Error<CommE, PinE>> + WriteData<Error = Error<CommE, PinE>>,
@@ -21,6 +24,49 @@ where
                 accel: None,
                 gyro: None,
                 magnet: None,
+                time: None,
+            }
+        };
+        Ok(result)
+    }
+}
+
+#[cfg(feature = "scaled_data")]
+impl<DI, CommE, PinE> Bmi160<DI>
+where
+    DI: ReadData<Error = Error<CommE, PinE>> + WriteData<Error = Error<CommE, PinE>>,
+{
+    /// Read latest sensor data
+    pub fn scaled_data(
+        &mut self,
+        selector: SensorSelector,
+    ) -> Result<DataScaled, Error<CommE, PinE>> {
+        let accel_div: f32 = match self.accel_range {
+            crate::AccelerometerRange::Range2g => 16384.0f32,
+            crate::AccelerometerRange::Range4g => 8192.0f32,
+            crate::AccelerometerRange::Range8g => 4096.0f32,
+        };
+
+        let result = if selector != SensorSelector::new() {
+            let (begin, end) = get_data_addresses(selector);
+            let mut data = [0_u8; 24];
+            data[0] = begin;
+            let len = (1 + end - begin) as usize;
+            self.iface.read_data(&mut data[0..len])?;
+            let unscaled_data = get_data(selector, &data[1..], (begin - Register::MAG) as usize);
+            DataScaled {
+                accel: unscaled_data.accel.and_then(|unscaled_accel| {
+                    Some(Sensor3DDataScaled {
+                        x: unscaled_accel.x as f32 / accel_div,
+                        y: unscaled_accel.y as f32 / accel_div,
+                        z: unscaled_accel.z as f32 / accel_div,
+                    })
+                }),
+                time: unscaled_data.time,
+            }
+        } else {
+            DataScaled {
+                accel: None,
                 time: None,
             }
         };
