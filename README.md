@@ -12,10 +12,11 @@ inertial measurement unit using the [`embedded-hal`] traits.
 This driver allows you to:
 - Get the latest sensor data. See: `data()`.
 - Set the accelerometer, gyroscope and magnetometer power mode. See: `set_accel_power_mode()`.
+- Set the accelerometer and gyroscope range. See: `set_accel_range()`.
 - Get the sensor status. See: `status()`.
 - Get power mode. See: `power_mode()`.
 - Get chip ID. See: `chip_id()`.
-
+- Get scaled values depending on accelerometer and gyroscope range. See: `scaled_data()`
 <!-- TODO
 [Introductory blog post]()
 -->
@@ -77,6 +78,11 @@ fn main() {
     }
 }
 ```
+
+### Scaled Data
+
+Not all platforms support floating point, so scaled values are hidden
+behind the feature flag `scaled_data`.
 
 ## Minimum Supported Rust Version (MSRV)
 
