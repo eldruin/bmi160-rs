@@ -1,5 +1,6 @@
 use crate::{
     interface::{I2cInterface, ReadData, SpiInterface, WriteData},
+    types::AccelerometerRange,
     AccelerometerPowerMode, BitFlags, Bmi160, Error, GyroscopePowerMode, MagnetometerPowerMode,
     Register, SensorPowerMode, SlaveAddr, Status,
 };
@@ -12,6 +13,8 @@ impl<I2C> Bmi160<I2cInterface<I2C>> {
                 i2c,
                 address: address.addr(),
             },
+            // Default reset value, no need to set
+            accel_range: AccelerometerRange::Range2g,
         }
     }
 
@@ -29,6 +32,8 @@ impl<SPI, CS> Bmi160<SpiInterface<SPI, CS>> {
                 spi,
                 cs: chip_select,
             },
+            // Default reset value, no need to set
+            accel_range: AccelerometerRange::Range2g,
         }
     }
 
@@ -83,6 +88,7 @@ where
             foc_ready: (status & BitFlags::FOC_RDY) != 0,
             magnet_manual_op: (status & BitFlags::MAG_MAN_OP) != 0,
             gyro_self_test_ok: (status & BitFlags::GYR_SELF_TEST_OK) != 0,
+            accel_range: self.accel_range,
         })
     }
 
@@ -97,6 +103,17 @@ where
             AccelerometerPowerMode::LowPower => 0b0001_0010,
         };
         self.iface.write_register(Register::CMD, cmd)
+    }
+
+    /// Configure accelerometer range
+    pub fn set_accel_range(&mut self, range: AccelerometerRange) -> Result<(), Error<CommE, PinE>> {
+        let cmd = match range {
+            AccelerometerRange::Range2g => 0b0011,
+            AccelerometerRange::Range4g => 0b0101,
+            AccelerometerRange::Range8g => 0b1000,
+        };
+        self.accel_range = range;
+        self.iface.write_register(Register::ACC_RANGE, cmd)
     }
 
     /// Configure gyroscope power mode

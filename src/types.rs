@@ -53,6 +53,29 @@ pub enum MagnetometerPowerMode {
     LowPower,
 }
 
+/// Accelerometer range
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum AccelerometerRange {
+    /// 2g
+    Range2g,
+    /// 4g
+    Range4g,
+    /// 8g
+    Range8g,
+}
+
+impl AccelerometerRange {
+    /// Determine AccelerometerRange from raw register value
+    pub fn from_register(value: &u8) -> Option<Self> {
+        match value & 0b1111 {
+            0b0011 => Some(Self::Range2g),
+            0b0101 => Some(Self::Range4g),
+            0b1000 => Some(Self::Range8g),
+            _ => None,
+        }
+    }
+}
+
 /// Sensor status flags
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Status {
@@ -70,6 +93,8 @@ pub struct Status {
     pub magnet_manual_op: bool,
     /// Gyroscope self-test completed successfully
     pub gyro_self_test_ok: bool,
+    /// Accelerometer range
+    pub accel_range: AccelerometerRange,
 }
 
 /// Sensor data read selector
