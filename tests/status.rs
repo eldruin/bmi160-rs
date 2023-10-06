@@ -1,11 +1,11 @@
-use bmi160::Status;
+use bmi160::{AccelerometerRange, GyroscopeRange, Status};
 mod common;
 use crate::common::{destroy_i2c, new_i2c, Register, DEV_ADDR};
 use embedded_hal_mock::i2c::Transaction as I2cTrans;
 
 macro_rules! get_st_test {
     ($name:ident, $st:expr, $drdy_acc:expr, $drdy_gyro:expr, $drdy_magnet:expr,
-     $nvm_rdy:expr, $foc_rdy:expr, $mag_man:expr, $gyr_self_test:expr) => {
+     $nvm_rdy:expr, $foc_rdy:expr, $mag_man:expr, $gyr_self_test:expr, $acc_range:expr, $gyr_range:expr) => {
         #[test]
         fn $name() {
             let mut imu = new_i2c(&[I2cTrans::write_read(
@@ -22,7 +22,9 @@ macro_rules! get_st_test {
                     nvm_ready: $nvm_rdy,
                     foc_ready: $foc_rdy,
                     magnet_manual_op: $mag_man,
-                    gyro_self_test_ok: $gyr_self_test
+                    gyro_self_test_ok: $gyr_self_test,
+                    accel_range: $acc_range,
+                    gyro_range: $gyr_range,
                 },
                 st
             );
@@ -40,7 +42,9 @@ get_st_test!(
     false,
     false,
     false,
-    false
+    false,
+    AccelerometerRange::Range2g,
+    GyroscopeRange::Range2000s
 );
 
 get_st_test!(
@@ -52,7 +56,9 @@ get_st_test!(
     false,
     false,
     false,
-    false
+    false,
+    AccelerometerRange::Range2g,
+    GyroscopeRange::Range2000s
 );
 
 get_st_test!(
@@ -64,7 +70,9 @@ get_st_test!(
     false,
     false,
     false,
-    false
+    false,
+    AccelerometerRange::Range2g,
+    GyroscopeRange::Range2000s
 );
 
 get_st_test!(
@@ -76,7 +84,9 @@ get_st_test!(
     true,
     false,
     false,
-    false
+    false,
+    AccelerometerRange::Range2g,
+    GyroscopeRange::Range2000s
 );
 
 get_st_test!(
@@ -88,7 +98,9 @@ get_st_test!(
     false,
     true,
     false,
-    false
+    false,
+    AccelerometerRange::Range2g,
+    GyroscopeRange::Range2000s
 );
 
 get_st_test!(
@@ -100,7 +112,9 @@ get_st_test!(
     false,
     false,
     true,
-    false
+    false,
+    AccelerometerRange::Range2g,
+    GyroscopeRange::Range2000s
 );
 
 get_st_test!(
@@ -112,7 +126,21 @@ get_st_test!(
     false,
     false,
     false,
-    true
+    true,
+    AccelerometerRange::Range2g,
+    GyroscopeRange::Range2000s
 );
 
-get_st_test!(all, 0b1111_1110, true, true, true, true, true, true, true);
+get_st_test!(
+    all,
+    0b1111_1110,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    AccelerometerRange::Range2g,
+    GyroscopeRange::Range2000s
+);
