@@ -42,17 +42,17 @@ where
         selector: SensorSelector,
     ) -> Result<DataScaled, Error<CommE, PinE>> {
         let accel_div: f32 = match self.accel_range {
-            crate::AccelerometerRange::Range2g => 16384.0f32,
-            crate::AccelerometerRange::Range4g => 8192.0f32,
-            crate::AccelerometerRange::Range8g => 4096.0f32,
+            crate::AccelerometerRange::Range2g => 1.0f32 / 16384.0f32,
+            crate::AccelerometerRange::Range4g => 1.0f32 / 8192.0f32,
+            crate::AccelerometerRange::Range8g => 1.0f32 / 4096.0f32,
         };
 
         let gyro_div: f32 = match self.gyro_range {
-            crate::GyroscopeRange::Range2000s => 16.4,
-            crate::GyroscopeRange::Range1000s => 32.8,
-            crate::GyroscopeRange::Range500s => 65.6,
-            crate::GyroscopeRange::Range250s => 131.2,
-            crate::GyroscopeRange::Range125s => 262.4,
+            crate::GyroscopeRange::Range2000s => 1.0f32 / 16.4,
+            crate::GyroscopeRange::Range1000s => 1.0f32 / 32.8,
+            crate::GyroscopeRange::Range500s => 1.0f32 / 65.6,
+            crate::GyroscopeRange::Range250s => 1.0f32 / 131.2,
+            crate::GyroscopeRange::Range125s => 1.0f32 / 262.4,
         };
 
         let result = if selector != SensorSelector::new() {
@@ -65,16 +65,16 @@ where
             DataScaled {
                 accel: unscaled_data.accel.and_then(|unscaled_accel| {
                     Some(Sensor3DDataScaled {
-                        x: unscaled_accel.x as f32 / accel_div,
-                        y: unscaled_accel.y as f32 / accel_div,
-                        z: unscaled_accel.z as f32 / accel_div,
+                        x: unscaled_accel.x as f32 * accel_div,
+                        y: unscaled_accel.y as f32 * accel_div,
+                        z: unscaled_accel.z as f32 * accel_div,
                     })
                 }),
                 gyro: unscaled_data.gyro.and_then(|unscaled_gyro| {
                     Some(Sensor3DDataScaled {
-                        x: unscaled_gyro.x as f32 / gyro_div,
-                        y: unscaled_gyro.y as f32 / gyro_div,
-                        z: unscaled_gyro.z as f32 / gyro_div,
+                        x: unscaled_gyro.x as f32 * gyro_div,
+                        y: unscaled_gyro.y as f32 * gyro_div,
+                        z: unscaled_gyro.z as f32 * gyro_div,
                     })
                 }),
                 time: unscaled_data.time,

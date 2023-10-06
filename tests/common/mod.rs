@@ -15,6 +15,8 @@ impl Register {
     pub const ACC: u8 = 0x12;
     pub const STATUS: u8 = 0x1B;
     pub const CMD: u8 = 0x7E;
+    pub const ACC_RANGE: u8 = 0x41;
+    pub const GYR_RANGE: u8 = 0x43;
 }
 
 pub const DEV_ADDR: u8 = 0x68;
