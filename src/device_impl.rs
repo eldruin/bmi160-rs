@@ -1,8 +1,7 @@
 use crate::{
     interface::{I2cInterface, ReadData, SpiInterface, WriteData},
-    AccelerometerRange,
-    AccelerometerPowerMode, BitFlags, Bmi160, Error, GyroscopePowerMode,
-    MagnetometerPowerMode, Register, SensorPowerMode, SlaveAddr, Status,
+    AccelerometerPowerMode, AccelerometerRange, BitFlags, Bmi160, Error, GyroscopePowerMode,
+    GyroscopeRange, MagnetometerPowerMode, Register, SensorPowerMode, SlaveAddr, Status,
 };
 
 impl<I2C> Bmi160<I2cInterface<I2C>> {
@@ -13,8 +12,9 @@ impl<I2C> Bmi160<I2cInterface<I2C>> {
                 i2c,
                 address: address.addr(),
             },
-            // Default reset value, no need to set
+            // Default reset values, no need to set
             accel_range: AccelerometerRange::Range2g,
+            gyro_range: GyroscopeRange::Range2000s,
         }
     }
 
@@ -32,8 +32,9 @@ impl<SPI, CS> Bmi160<SpiInterface<SPI, CS>> {
                 spi,
                 cs: chip_select,
             },
-            // Default reset value, no need to set
+            // Default reset values, no need to set
             accel_range: AccelerometerRange::Range2g,
+            gyro_range: GyroscopeRange::Range2000s,
         }
     }
 
@@ -89,6 +90,7 @@ where
             magnet_manual_op: (status & BitFlags::MAG_MAN_OP) != 0,
             gyro_self_test_ok: (status & BitFlags::GYR_SELF_TEST_OK) != 0,
             accel_range: self.accel_range,
+            gyro_range: self.gyro_range,
         })
     }
 
@@ -114,6 +116,19 @@ where
         };
         self.accel_range = range;
         self.iface.write_register(Register::ACC_RANGE, cmd)
+    }
+
+    /// Configure accelerometer range
+    pub fn set_gyro_range(&mut self, range: GyroscopeRange) -> Result<(), Error<CommE, PinE>> {
+        let cmd = match range {
+            GyroscopeRange::Range2000s => 0b000,
+            GyroscopeRange::Range1000s => 0b001,
+            GyroscopeRange::Range500s => 0b010,
+            GyroscopeRange::Range250s => 0b011,
+            GyroscopeRange::Range125s => 0b100,
+        };
+        self.gyro_range = range;
+        self.iface.write_register(Register::GYR_RANGE, cmd)
     }
 
     /// Configure gyroscope power mode

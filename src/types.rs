@@ -76,6 +76,35 @@ impl AccelerometerRange {
     }
 }
 
+/// Gyroscope range
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum GyroscopeRange {
+    /// 125 degree/s
+    Range125s,
+    /// 250 degree/s
+    Range250s,
+    /// 500 degree/s
+    Range500s,
+    /// 1000 degree/s
+    Range1000s,
+    /// 2000 degree/s
+    Range2000s,
+}
+
+impl GyroscopeRange {
+    /// Determine GyroscopeRange from raw register value
+    pub fn from_register(value: &u8) -> Option<Self> {
+        match value & 0b111 {
+            0b000 => Some(Self::Range2000s),
+            0b001 => Some(Self::Range1000s),
+            0b010 => Some(Self::Range500s),
+            0b011 => Some(Self::Range250s),
+            0b100 => Some(Self::Range125s),
+            _ => None,
+        }
+    }
+}
+
 /// Sensor status flags
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Status {
@@ -95,6 +124,8 @@ pub struct Status {
     pub gyro_self_test_ok: bool,
     /// Accelerometer range
     pub accel_range: AccelerometerRange,
+    /// GyroscopeRange range
+    pub gyro_range: GyroscopeRange,
 }
 
 /// Sensor data read selector

@@ -118,14 +118,14 @@
 
 mod device_impl;
 pub mod interface;
-mod types;
 #[cfg(feature = "scaled_data")]
 mod scaling;
+mod types;
 
 pub use crate::interface::SlaveAddr;
 pub use crate::types::{
-    AccelerometerPowerMode, AccelerometerRange, Data, Error, GyroscopePowerMode, MagnetometerData,
-    MagnetometerPowerMode, Sensor3DData, SensorPowerMode, SensorSelector, Status,
+    AccelerometerPowerMode, AccelerometerRange, Data, Error, GyroscopePowerMode, GyroscopeRange,
+    MagnetometerData, MagnetometerPowerMode, Sensor3DData, SensorPowerMode, SensorSelector, Status,
 };
 mod register_address;
 use crate::register_address::{BitFlags, Register};
@@ -137,6 +137,7 @@ pub struct Bmi160<DI> {
     /// Digital interface: I2C or SPI
     iface: DI,
     accel_range: AccelerometerRange,
+    gyro_range: GyroscopeRange,
 }
 
 mod private {
