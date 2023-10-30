@@ -16,6 +16,8 @@ pub struct Sensor3DDataScaled {
 pub struct DataScaled {
     /// Accelerometer data (if selected)
     pub accel: Option<Sensor3DDataScaled>,
+    /// Gyroscope data (if selected)
+    pub gyro: Option<Sensor3DDataScaled>,
     /// Time data (if selected)
     pub time: Option<u32>,
 }

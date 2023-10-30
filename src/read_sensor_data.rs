@@ -47,6 +47,14 @@ where
             crate::AccelerometerRange::Range8g => 4096.0f32,
         };
 
+        let gyro_div: f32 = match self.gyro_range {
+            crate::GyroscopeRange::Range2000s => 16.4,
+            crate::GyroscopeRange::Range1000s => 32.8,
+            crate::GyroscopeRange::Range500s => 65.6,
+            crate::GyroscopeRange::Range250s => 131.2,
+            crate::GyroscopeRange::Range125s => 262.4,
+        };
+
         let result = if selector != SensorSelector::new() {
             let (begin, end) = get_data_addresses(selector);
             let mut data = [0_u8; 24];
@@ -62,11 +70,19 @@ where
                         z: unscaled_accel.z as f32 / accel_div,
                     })
                 }),
+                gyro: unscaled_data.gyro.and_then(|unscaled_gyro| {
+                    Some(Sensor3DDataScaled {
+                        x: unscaled_gyro.x as f32 / gyro_div,
+                        y: unscaled_gyro.y as f32 / gyro_div,
+                        z: unscaled_gyro.z as f32 / gyro_div,
+                    })
+                }),
                 time: unscaled_data.time,
             }
         } else {
             DataScaled {
                 accel: None,
+                gyro: None,
                 time: None,
             }
         };
