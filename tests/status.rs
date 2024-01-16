@@ -1,7 +1,7 @@
 use bmi160::Status;
 mod common;
 use crate::common::{destroy_i2c, new_i2c, Register, DEV_ADDR};
-use embedded_hal_mock::i2c::Transaction as I2cTrans;
+use embedded_hal_mock::eh1::i2c::Transaction as I2cTrans;
 
 macro_rules! get_st_test {
     ($name:ident, $st:expr, $drdy_acc:expr, $drdy_gyro:expr, $drdy_magnet:expr,

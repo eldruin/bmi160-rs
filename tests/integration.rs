@@ -1,7 +1,7 @@
 use bmi160::{Data, MagnetometerData, Sensor3DData, SensorSelector};
 mod common;
 use crate::common::{destroy_i2c, destroy_spi, new_i2c, new_spi, Register, DEV_ADDR};
-use embedded_hal_mock::{i2c::Transaction as I2cTrans, pin::Mock as PinMock};
+use embedded_hal_mock::eh1::i2c::Transaction as I2cTrans;
 
 #[test]
 fn can_create_and_destroy_i2c() {
@@ -11,7 +11,7 @@ fn can_create_and_destroy_i2c() {
 
 #[test]
 fn can_create_and_destroy_spi() {
-    let imu = new_spi(&[], PinMock::new(&[]));
+    let imu = new_spi(&[]);
     destroy_spi(imu);
 }
 
@@ -48,6 +48,7 @@ mod get_sensor_data {
         let mut imu = new_i2c(&[]);
         let result = imu.data(SensorSelector::new()).unwrap();
         assert_eq!(result, EMPTY);
+        destroy_i2c(imu);
     }
 
     #[test]
@@ -80,6 +81,7 @@ mod get_sensor_data {
             time: Some(0x171615),
         };
         assert_eq!(result, expected);
+        destroy_i2c(imu);
     }
 
     #[test]
@@ -101,6 +103,7 @@ mod get_sensor_data {
             time: Some(0x171615),
         };
         assert_eq!(result, expected);
+        destroy_i2c(imu);
     }
 
     #[test]
@@ -122,5 +125,6 @@ mod get_sensor_data {
             time: None,
         };
         assert_eq!(result, expected);
+        destroy_i2c(imu);
     }
 }
