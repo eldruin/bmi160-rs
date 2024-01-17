@@ -21,34 +21,31 @@ impl<I2C> Bmi160<I2cInterface<I2C>> {
     }
 }
 
-impl<SPI, CS> Bmi160<SpiInterface<SPI, CS>> {
+impl<SPI> Bmi160<SpiInterface<SPI>> {
     /// Create new instance of the BMI160 device communicating through SPI.
-    pub fn new_with_spi(spi: SPI, chip_select: CS) -> Self {
+    pub fn new_with_spi(spi: SPI) -> Self {
         Bmi160 {
-            iface: SpiInterface {
-                spi,
-                cs: chip_select,
-            },
+            iface: SpiInterface { spi },
         }
     }
 
-    /// Destroy driver instance, return SPI bus instance and chip select pin.
-    pub fn destroy(self) -> (SPI, CS) {
-        (self.iface.spi, self.iface.cs)
+    /// Destroy driver instance, return SPI device instance.
+    pub fn destroy(self) -> SPI {
+        self.iface.spi
     }
 }
 
-impl<DI, CommE, PinE> Bmi160<DI>
+impl<DI, CommE> Bmi160<DI>
 where
-    DI: ReadData<Error = Error<CommE, PinE>> + WriteData<Error = Error<CommE, PinE>>,
+    DI: ReadData<Error = Error<CommE>> + WriteData<Error = Error<CommE>>,
 {
     /// Get chip ID
-    pub fn chip_id(&mut self) -> Result<u8, Error<CommE, PinE>> {
+    pub fn chip_id(&mut self) -> Result<u8, Error<CommE>> {
         self.iface.read_register(Register::CHIPID)
     }
 
     /// Get sensor power mode
-    pub fn power_mode(&mut self) -> Result<SensorPowerMode, Error<CommE, PinE>> {
+    pub fn power_mode(&mut self) -> Result<SensorPowerMode, Error<CommE>> {
         let status = self.iface.read_register(Register::PMU_STATUS)?;
         let accel = match status & (0b11 << 4) {
             0 => AccelerometerPowerMode::Suspend,
@@ -73,7 +70,7 @@ where
     }
 
     /// Get sensor status
-    pub fn status(&mut self) -> Result<Status, Error<CommE, PinE>> {
+    pub fn status(&mut self) -> Result<Status, Error<CommE>> {
         let status = self.iface.read_register(Register::STATUS)?;
         Ok(Status {
             accel_data_ready: (status & BitFlags::DRDY_ACC) != 0,
@@ -90,7 +87,7 @@ where
     pub fn set_accel_power_mode(
         &mut self,
         mode: AccelerometerPowerMode,
-    ) -> Result<(), Error<CommE, PinE>> {
+    ) -> Result<(), Error<CommE>> {
         let cmd = match mode {
             AccelerometerPowerMode::Suspend => 0b0001_0000,
             AccelerometerPowerMode::Normal => 0b0001_0001,
@@ -100,10 +97,7 @@ where
     }
 
     /// Configure gyroscope power mode
-    pub fn set_gyro_power_mode(
-        &mut self,
-        mode: GyroscopePowerMode,
-    ) -> Result<(), Error<CommE, PinE>> {
+    pub fn set_gyro_power_mode(&mut self, mode: GyroscopePowerMode) -> Result<(), Error<CommE>> {
         let cmd = match mode {
             GyroscopePowerMode::Suspend => 0b0001_0100,
             GyroscopePowerMode::Normal => 0b0001_0101,
@@ -116,7 +110,7 @@ where
     pub fn set_magnet_power_mode(
         &mut self,
         mode: MagnetometerPowerMode,
-    ) -> Result<(), Error<CommE, PinE>> {
+    ) -> Result<(), Error<CommE>> {
         let cmd = match mode {
             MagnetometerPowerMode::Suspend => 0b0001_1000,
             MagnetometerPowerMode::Normal => 0b0001_1001,

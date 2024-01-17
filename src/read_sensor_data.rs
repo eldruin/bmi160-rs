@@ -3,12 +3,12 @@ use crate::{
     Bmi160, Data, Error, MagnetometerData, Register, Sensor3DData, SensorSelector,
 };
 
-impl<DI, CommE, PinE> Bmi160<DI>
+impl<DI, CommE> Bmi160<DI>
 where
-    DI: ReadData<Error = Error<CommE, PinE>> + WriteData<Error = Error<CommE, PinE>>,
+    DI: ReadData<Error = Error<CommE>> + WriteData<Error = Error<CommE>>,
 {
     /// Read latest sensor data
-    pub fn data(&mut self, selector: SensorSelector) -> Result<Data, Error<CommE, PinE>> {
+    pub fn data(&mut self, selector: SensorSelector) -> Result<Data, Error<CommE>> {
         let result = if selector != SensorSelector::new() {
             let (begin, end) = get_data_addresses(selector);
             let mut data = [0_u8; 24];

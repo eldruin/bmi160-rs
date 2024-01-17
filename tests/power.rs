@@ -1,7 +1,7 @@
 use bmi160::{AccelerometerPowerMode, GyroscopePowerMode, MagnetometerPowerMode, SensorPowerMode};
 mod common;
 use crate::common::{destroy_i2c, new_i2c, Register, DEV_ADDR};
-use embedded_hal_mock::i2c::Transaction as I2cTrans;
+use embedded_hal_mock::eh1::i2c::Transaction as I2cTrans;
 
 macro_rules! get_pm_test {
     ($name:ident, $pmu:expr, $accel:ident, $gyro:ident, $magnet:ident) => {

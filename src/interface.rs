@@ -1,10 +1,7 @@
 //! I2C/SPI interfaces
 
 use crate::{private, Error};
-use embedded_hal::{
-    blocking::{i2c, spi},
-    digital,
-};
+use embedded_hal::{i2c, spi::SpiDevice};
 
 const I2C_DEV_BASE_ADDR: u8 = 0x68;
 
@@ -17,9 +14,8 @@ pub struct I2cInterface<I2C> {
 
 /// SPI interface
 #[derive(Debug)]
-pub struct SpiInterface<SPI, CS> {
+pub struct SpiInterface<SPI> {
     pub(crate) spi: SPI,
-    pub(crate) cs: CS,
 }
 
 /// Possible slave addresses
@@ -61,9 +57,9 @@ pub trait WriteData: private::Sealed {
 
 impl<I2C, E> WriteData for I2cInterface<I2C>
 where
-    I2C: i2c::Write<Error = E>,
+    I2C: i2c::I2c<Error = E>,
 {
-    type Error = Error<E, ()>;
+    type Error = Error<E>;
     fn write_register(&mut self, register: u8, data: u8) -> Result<(), Self::Error> {
         let payload: [u8; 2] = [register, data];
         let addr = self.address;
@@ -76,28 +72,18 @@ where
     }
 }
 
-impl<SPI, CS, CommE, PinE> WriteData for SpiInterface<SPI, CS>
+impl<SPI, CommE> WriteData for SpiInterface<SPI>
 where
-    SPI: spi::Write<u8, Error = CommE>,
-    CS: digital::v2::OutputPin<Error = PinE>,
+    SPI: SpiDevice<u8, Error = CommE>,
 {
-    type Error = Error<CommE, PinE>;
+    type Error = Error<CommE>;
     fn write_register(&mut self, register: u8, data: u8) -> Result<(), Self::Error> {
-        self.cs.set_low().map_err(Error::Pin)?;
-
         let payload: [u8; 2] = [register, data];
-        let result = self.spi.write(&payload).map_err(Error::Comm);
-
-        self.cs.set_high().map_err(Error::Pin)?;
-        result
+        self.spi.write(&payload).map_err(Error::Comm)
     }
 
     fn write_data(&mut self, payload: &mut [u8]) -> Result<(), Self::Error> {
-        self.cs.set_low().map_err(Error::Pin)?;
-        let result = self.spi.write(payload).map_err(Error::Comm);
-
-        self.cs.set_high().map_err(Error::Pin)?;
-        result
+        self.spi.write(payload).map_err(Error::Comm)
     }
 }
 
@@ -113,9 +99,9 @@ pub trait ReadData: private::Sealed {
 
 impl<I2C, E> ReadData for I2cInterface<I2C>
 where
-    I2C: i2c::WriteRead<Error = E>,
+    I2C: i2c::I2c<Error = E>,
 {
-    type Error = Error<E, ()>;
+    type Error = Error<E>;
     fn read_register(&mut self, register: u8) -> Result<u8, Self::Error> {
         let mut data = [0];
         let addr = self.address;
@@ -134,26 +120,20 @@ where
     }
 }
 
-impl<SPI, CS, CommE, PinE> ReadData for SpiInterface<SPI, CS>
+impl<SPI, CommE> ReadData for SpiInterface<SPI>
 where
-    SPI: spi::Transfer<u8, Error = CommE>,
-    CS: digital::v2::OutputPin<Error = PinE>,
+    SPI: SpiDevice<u8, Error = CommE>,
 {
-    type Error = Error<CommE, PinE>;
+    type Error = Error<CommE>;
     fn read_register(&mut self, register: u8) -> Result<u8, Self::Error> {
-        self.cs.set_low().map_err(Error::Pin)?;
         let mut data = [register + 0x80, 0];
-        let result = self.spi.transfer(&mut data).map_err(Error::Comm);
-        self.cs.set_high().map_err(Error::Pin)?;
-        Ok(result?[1])
+        self.spi.transfer_in_place(&mut data).map_err(Error::Comm)?;
+        Ok(data[1])
     }
 
     fn read_data(&mut self, payload: &mut [u8]) -> Result<(), Self::Error> {
-        self.cs.set_low().map_err(Error::Pin)?;
         payload[0] += 0x80;
-        let result = self.spi.transfer(payload).map_err(Error::Comm);
-        self.cs.set_high().map_err(Error::Pin)?;
-        result?;
+        self.spi.transfer_in_place(payload).map_err(Error::Comm)?;
         Ok(())
     }
 }

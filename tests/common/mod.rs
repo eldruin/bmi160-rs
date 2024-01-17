@@ -1,7 +1,6 @@
 use bmi160::{interface, Bmi160, SlaveAddr};
-use embedded_hal_mock::{
+use embedded_hal_mock::eh1::{
     i2c::{Mock as I2cMock, Transaction as I2cTrans},
-    pin::{Mock as PinMock, State as PinState, Transaction as PinTrans},
     spi::{Mock as SpiMock, Transaction as SpiTrans},
 };
 
@@ -20,23 +19,14 @@ impl Register {
 pub const DEV_ADDR: u8 = 0x68;
 
 #[allow(unused)]
-pub fn default_cs() -> PinMock {
-    PinMock::new(&[PinTrans::set(PinState::Low), PinTrans::set(PinState::High)])
+pub fn new_spi(transactions: &[SpiTrans<u8>]) -> Bmi160<interface::SpiInterface<SpiMock<u8>>> {
+    Bmi160::new_with_spi(SpiMock::new(transactions))
 }
 
 #[allow(unused)]
-pub fn new_spi(
-    transactions: &[SpiTrans],
-    cs: PinMock,
-) -> Bmi160<interface::SpiInterface<SpiMock, PinMock>> {
-    Bmi160::new_with_spi(SpiMock::new(transactions), cs)
-}
-
-#[allow(unused)]
-pub fn destroy_spi(imu: Bmi160<interface::SpiInterface<SpiMock, PinMock>>) {
-    let (mut spi, mut cs) = imu.destroy();
+pub fn destroy_spi(imu: Bmi160<interface::SpiInterface<SpiMock<u8>>>) {
+    let mut spi = imu.destroy();
     spi.done();
-    cs.done();
 }
 
 #[allow(unused)]
