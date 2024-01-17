@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust: [stable, beta, 1.62.0]
+        rust: [stable, 1.62.0]
         TARGET:
           - x86_64-unknown-linux-gnu
           - x86_64-unknown-linux-musl
@@ -23,14 +23,14 @@ jobs:
           - thumbv7m-none-eabi
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.rust }}
           targets: ${{ matrix.TARGET }}
 
       - name: Checkout CI scripts
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'eldruin/rust-driver-ci-scripts'
           ref: 'master'
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-unknown-linux-gnu
@@ -60,10 +60,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: 1.68.0
+          toolchain: 1.75.0
           targets: x86_64-unknown-linux-gnu
           components: clippy
 
@@ -74,11 +74,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust: [stable, beta]
+        rust: [stable]
         TARGET: [x86_64-unknown-linux-gnu, x86_64-unknown-linux-musl]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.rust }}
@@ -98,7 +98,7 @@ jobs:
       options: --security-opt seccomp=unconfined
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
 
       - name: Run cargo-tarpaulin
