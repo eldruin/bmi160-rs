@@ -1,5 +1,6 @@
 use crate::{
     interface::{I2cInterface, ReadData, SpiInterface, WriteData},
+    types::{AccelerometerRange, GyroRange},
     AccelerometerPowerMode, BitFlags, Bmi160, Error, GyroscopePowerMode, MagnetometerPowerMode,
     Register, SensorPowerMode, SlaveAddr, Status,
 };
@@ -117,5 +118,15 @@ where
             MagnetometerPowerMode::LowPower => 0b0001_1010,
         };
         self.iface.write_register(Register::CMD, cmd)
+    }
+
+    /// Set the accelerometer range
+    pub fn set_accel_range(&mut self, range: AccelerometerRange) -> Result<(), Error<CommE>> {
+        self.iface.write_register(Register::ACC_RANGE, range as u8)
+    }
+
+    /// Set the gyro range
+    pub fn set_gyro_range(&mut self, range: GyroRange) -> Result<(), Error<CommE>> {
+        self.iface.write_register(Register::GYR_RANGE, range as u8)
     }
 }

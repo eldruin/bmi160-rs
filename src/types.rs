@@ -29,6 +29,19 @@ pub enum AccelerometerPowerMode {
     LowPower,
 }
 
+/// Accelerometer Range.
+/// See 2.11.12 Register (0x41) ACC_RANGE;
+/// BMI160 BST-BMI160-DS000-09 Rev 1.0 p. 59
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum AccelerometerRange {
+    /// +- 2G
+    G2 = 0b0000_0011,
+    /// +- 4G
+    G4 = 0b0000_0101,
+    /// +- 8G
+    G8 = 0b0000_1000,
+}
+
 /// Gyroscope power mode
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum GyroscopePowerMode {
@@ -38,6 +51,22 @@ pub enum GyroscopePowerMode {
     Suspend,
     /// Fast start-up mode
     FastStartUp,
+}
+
+/// 2.11.14 Register (0x43) GYR_RANGE
+/// BMI160 BST-BMI160-DS000-09 Rev 1.0 p. 61
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum GyroRange {
+    /// 16.4 LSB/°/s <-> 61.0 m°/s / LSB
+    Scale2000 = 0b0000_0000,
+    /// 32.8 LSB/°/s <-> 30.5 m°/s / LSB
+    Scale1000 = 0b0000_0001,
+    /// 65.6 LSB/°/s <-> 15.3 m°/s / LSB
+    Scale500 = 0b0000_0010,
+    /// 131.2 LSB/°/s <-> 7.6 m°/s / LSB
+    Scale250 = 0b0000_0011,
+    /// 262.4 LSB/°/s  3.8m°/s / LSB
+    Scale125 = 0b0000_0100,
 }
 
 /// Magnetometer power mode
