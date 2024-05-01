@@ -1,5 +1,6 @@
 use crate::{
     interface::{ReadData, WriteData},
+    types::{DataScaled, Sensor3DDataScaled},
     Bmi160, Data, Error, MagnetometerData, Register, Sensor3DData, SensorSelector,
 };
 
@@ -25,6 +26,29 @@ where
             }
         };
         Ok(result)
+    }
+
+    /// Read latest sensor data and scale it using the gyroscope and accelerometer ranges
+    pub fn data_scaled(&mut self, selector: SensorSelector) -> Result<DataScaled, Error<CommE>> {
+        let raw_data = self.data(selector)?;
+
+        let accel_multiplier = self.accel_range.multiplier();
+        let gyro_multiplier = self.gyro_range.multiplier();
+
+        Ok(DataScaled {
+            accel: raw_data.accel.map(|d| Sensor3DDataScaled {
+                x: d.x as f32 * accel_multiplier,
+                y: d.y as f32 * accel_multiplier,
+                z: d.z as f32 * accel_multiplier,
+            }),
+            gyro: raw_data.gyro.map(|d| Sensor3DDataScaled {
+                x: d.x as f32 * gyro_multiplier,
+                y: d.y as f32 * gyro_multiplier,
+                z: d.z as f32 * gyro_multiplier,
+            }),
+            magnet: raw_data.magnet,
+            time: raw_data.time,
+        })
     }
 }
 

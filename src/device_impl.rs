@@ -13,6 +13,8 @@ impl<I2C> Bmi160<I2cInterface<I2C>> {
                 i2c,
                 address: address.addr(),
             },
+            accel_range: AccelerometerRange::default(),
+            gyro_range: GyroRange::default(),
         }
     }
 
@@ -27,6 +29,8 @@ impl<SPI> Bmi160<SpiInterface<SPI>> {
     pub fn new_with_spi(spi: SPI) -> Self {
         Bmi160 {
             iface: SpiInterface { spi },
+            accel_range: AccelerometerRange::default(),
+            gyro_range: GyroRange::default(),
         }
     }
 
@@ -122,11 +126,13 @@ where
 
     /// Set the accelerometer range
     pub fn set_accel_range(&mut self, range: AccelerometerRange) -> Result<(), Error<CommE>> {
+        self.accel_range = range;
         self.iface.write_register(Register::ACC_RANGE, range as u8)
     }
 
     /// Set the gyro range
     pub fn set_gyro_range(&mut self, range: GyroRange) -> Result<(), Error<CommE>> {
+        self.gyro_range = range;
         self.iface.write_register(Register::GYR_RANGE, range as u8)
     }
 }

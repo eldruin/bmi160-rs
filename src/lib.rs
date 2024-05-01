@@ -132,6 +132,8 @@ mod read_sensor_data;
 pub struct Bmi160<DI> {
     /// Digital interface: I2C or SPI
     iface: DI,
+    accel_range: AccelerometerRange,
+    gyro_range: GyroRange,
 }
 
 mod private {
