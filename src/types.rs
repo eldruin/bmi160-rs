@@ -29,6 +29,28 @@ pub enum AccelerometerPowerMode {
     LowPower,
 }
 
+/// Accelerometer Range
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub enum AccelerometerRange {
+    /// +- 2G
+    #[default]
+    G2 = 0b0000_0011,
+    /// +- 4G
+    G4 = 0b0000_0101,
+    /// +- 8G
+    G8 = 0b0000_1000,
+}
+
+impl AccelerometerRange {
+    pub(crate) fn multiplier(self) -> f32 {
+        match self {
+            AccelerometerRange::G2 => 1. / 16384.,
+            AccelerometerRange::G4 => 1. / 8192.,
+            AccelerometerRange::G8 => 1. / 4096.,
+        }
+    }
+}
+
 /// Gyroscope power mode
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum GyroscopePowerMode {
@@ -38,6 +60,34 @@ pub enum GyroscopePowerMode {
     Suspend,
     /// Fast start-up mode
     FastStartUp,
+}
+
+/// Gyroscope range
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub enum GyroscopeRange {
+    /// 16.4 LSB/°/s <-> 61.0 m°/s / LSB
+    #[default]
+    Scale2000 = 0b0000_0000,
+    /// 32.8 LSB/°/s <-> 30.5 m°/s / LSB
+    Scale1000 = 0b0000_0001,
+    /// 65.6 LSB/°/s <-> 15.3 m°/s / LSB
+    Scale500 = 0b0000_0010,
+    /// 131.2 LSB/°/s <-> 7.6 m°/s / LSB
+    Scale250 = 0b0000_0011,
+    /// 262.4 LSB/°/s  3.8m°/s / LSB
+    Scale125 = 0b0000_0100,
+}
+
+impl GyroscopeRange {
+    pub(crate) fn multiplier(self) -> f32 {
+        match self {
+            GyroscopeRange::Scale2000 => 1. / 16.4,
+            GyroscopeRange::Scale1000 => 1. / 32.8,
+            GyroscopeRange::Scale500 => 1. / 65.6,
+            GyroscopeRange::Scale250 => 1. / 131.2,
+            GyroscopeRange::Scale125 => 1. / 262.4,
+        }
+    }
 }
 
 /// Magnetometer power mode
@@ -160,6 +210,30 @@ pub struct Data {
     pub accel: Option<Sensor3DData>,
     /// Gyroscope data (if selected)
     pub gyro: Option<Sensor3DData>,
+    /// Magnetometer data (if selected)
+    pub magnet: Option<MagnetometerData>,
+    /// Time data (if selected)
+    pub time: Option<u32>,
+}
+
+/// Floating point 3D data
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Sensor3DDataScaled {
+    /// X axis data
+    pub x: f32,
+    /// Y axis data
+    pub y: f32,
+    /// Z axis data
+    pub z: f32,
+}
+
+/// Sensor data read
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct DataScaled {
+    /// Accelerometer data (if selected)
+    pub accel: Option<Sensor3DDataScaled>,
+    /// Gyroscope data (if selected)
+    pub gyro: Option<Sensor3DDataScaled>,
     /// Magnetometer data (if selected)
     pub magnet: Option<MagnetometerData>,
     /// Time data (if selected)

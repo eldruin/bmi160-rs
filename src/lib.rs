@@ -120,8 +120,9 @@ pub mod interface;
 mod types;
 pub use crate::interface::SlaveAddr;
 pub use crate::types::{
-    AccelerometerPowerMode, Data, Error, GyroscopePowerMode, MagnetometerData,
-    MagnetometerPowerMode, Sensor3DData, SensorPowerMode, SensorSelector, Status,
+    AccelerometerPowerMode, AccelerometerRange, Data, DataScaled, Error, GyroscopePowerMode,
+    GyroscopeRange, MagnetometerData, MagnetometerPowerMode, Sensor3DData, Sensor3DDataScaled,
+    SensorPowerMode, SensorSelector, Status,
 };
 mod register_address;
 use crate::register_address::{BitFlags, Register};
@@ -132,6 +133,8 @@ mod read_sensor_data;
 pub struct Bmi160<DI> {
     /// Digital interface: I2C or SPI
     iface: DI,
+    accel_range: AccelerometerRange,
+    gyro_range: GyroscopeRange,
 }
 
 mod private {

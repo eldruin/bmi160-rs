@@ -11,7 +11,9 @@ inertial measurement unit using the [`embedded-hal`] traits.
 
 This driver allows you to:
 - Get the latest sensor data. See: `data()`.
+- Get the latest sensor data scaled to the configured ranges. See: `data_scaled()`.  
 - Set the accelerometer, gyroscope and magnetometer power mode. See: `set_accel_power_mode()`.
+- Set the accelerometer and gyro range, See: `set_accel_range()` and `set_gyro_range()`.
 - Get the sensor status. See: `status()`.
 - Get power mode. See: `power_mode()`.
 - Get chip ID. See: `chip_id()`.

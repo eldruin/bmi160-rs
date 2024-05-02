@@ -1,5 +1,6 @@
 use crate::{
     interface::{I2cInterface, ReadData, SpiInterface, WriteData},
+    types::{AccelerometerRange, GyroscopeRange},
     AccelerometerPowerMode, BitFlags, Bmi160, Error, GyroscopePowerMode, MagnetometerPowerMode,
     Register, SensorPowerMode, SlaveAddr, Status,
 };
@@ -12,6 +13,8 @@ impl<I2C> Bmi160<I2cInterface<I2C>> {
                 i2c,
                 address: address.addr(),
             },
+            accel_range: AccelerometerRange::default(),
+            gyro_range: GyroscopeRange::default(),
         }
     }
 
@@ -26,6 +29,8 @@ impl<SPI> Bmi160<SpiInterface<SPI>> {
     pub fn new_with_spi(spi: SPI) -> Self {
         Bmi160 {
             iface: SpiInterface { spi },
+            accel_range: AccelerometerRange::default(),
+            gyro_range: GyroscopeRange::default(),
         }
     }
 
@@ -117,5 +122,21 @@ where
             MagnetometerPowerMode::LowPower => 0b0001_1010,
         };
         self.iface.write_register(Register::CMD, cmd)
+    }
+
+    /// Set the accelerometer range
+    pub fn set_accel_range(&mut self, range: AccelerometerRange) -> Result<(), Error<CommE>> {
+        self.iface
+            .write_register(Register::ACC_RANGE, range as u8)?;
+        self.accel_range = range;
+        Ok(())
+    }
+
+    /// Set the gyro range
+    pub fn set_gyro_range(&mut self, range: GyroscopeRange) -> Result<(), Error<CommE>> {
+        self.iface
+            .write_register(Register::GYR_RANGE, range as u8)?;
+        self.gyro_range = range;
+        Ok(())
     }
 }
