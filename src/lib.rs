@@ -120,8 +120,9 @@ pub mod interface;
 mod types;
 pub use crate::interface::SlaveAddr;
 pub use crate::types::{
-    AccelerometerPowerMode, AccelerometerRange, Data, Error, GyroscopePowerMode, GyroscopeRange,
-    MagnetometerData, MagnetometerPowerMode, Sensor3DData, SensorPowerMode, SensorSelector, Status,
+    AccelerometerPowerMode, AccelerometerRange, Data, DataScaled, Error, GyroscopePowerMode,
+    GyroscopeRange, MagnetometerData, MagnetometerPowerMode, Sensor3DData, Sensor3DDataScaled,
+    SensorPowerMode, SensorSelector, Status,
 };
 mod register_address;
 use crate::register_address::{BitFlags, Register};

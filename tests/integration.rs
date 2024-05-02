@@ -1,4 +1,4 @@
-use bmi160::{Data, MagnetometerData, Sensor3DData, SensorSelector};
+use bmi160::{Data, MagnetometerData, Sensor3DData, Sensor3DDataScaled, SensorSelector};
 mod common;
 use crate::common::{destroy_i2c, destroy_spi, new_i2c, new_spi, Register, DEV_ADDR};
 use embedded_hal_mock::eh1::i2c::Transaction as I2cTrans;
@@ -29,6 +29,8 @@ fn can_get_chip_id() {
 }
 
 mod get_sensor_data {
+    use bmi160::DataScaled;
+
     use super::*;
 
     const EMPTY: Data = Data {
@@ -123,6 +125,39 @@ mod get_sensor_data {
             }),
             accel: None,
             time: None,
+        };
+        assert_eq!(result, expected);
+        destroy_i2c(imu);
+    }
+
+    #[test]
+    fn all_scaled() {
+        let mut imu = new_i2c(&[I2cTrans::write_read(
+            DEV_ADDR,
+            vec![Register::MAG],
+            BUFFER.to_vec(),
+        )]);
+        let result = imu.data_scaled(SensorSelector::all()).unwrap();
+        let expected = DataScaled {
+            magnet: Some(MagnetometerData {
+                axes: Sensor3DData {
+                    x: 0x0201,
+                    y: 0x0403,
+                    z: 0x0605,
+                },
+                hall_resistence: 0x0807,
+            }),
+            gyro: Some(Sensor3DDataScaled {
+                x: 0x0A09 as f32 * (1. / 16.4),
+                y: 0x0C0B as f32 * (1. / 16.4),
+                z: 0x0E0D as f32 * (1. / 16.4),
+            }),
+            accel: Some(Sensor3DDataScaled {
+                x: 0x100F as f32 * (1. / 16384.),
+                y: 0x1211 as f32 * (1. / 16384.),
+                z: 0x1413 as f32 * (1. / 16384.),
+            }),
+            time: Some(0x171615),
         };
         assert_eq!(result, expected);
         destroy_i2c(imu);
