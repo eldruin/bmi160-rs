@@ -126,13 +126,17 @@ where
 
     /// Set the accelerometer range
     pub fn set_accel_range(&mut self, range: AccelerometerRange) -> Result<(), Error<CommE>> {
+        self.iface
+            .write_register(Register::ACC_RANGE, range as u8)?;
         self.accel_range = range;
-        self.iface.write_register(Register::ACC_RANGE, range as u8)
+        Ok(())
     }
 
     /// Set the gyro range
     pub fn set_gyro_range(&mut self, range: GyroRange) -> Result<(), Error<CommE>> {
+        self.iface
+            .write_register(Register::GYR_RANGE, range as u8)?;
         self.gyro_range = range;
-        self.iface.write_register(Register::GYR_RANGE, range as u8)
+        Ok(())
     }
 }
