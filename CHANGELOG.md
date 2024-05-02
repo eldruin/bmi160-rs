@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-- Added types and support for setting Accelerometer and Gyroscope Range
+- Added types and support for setting accelerometer and gyroscope ranges and retrieving scale sensor values.
 
 ## [1.0.0] - 2024-01-17
 
