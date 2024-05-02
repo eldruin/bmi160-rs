@@ -29,9 +29,7 @@ pub enum AccelerometerPowerMode {
     LowPower,
 }
 
-/// Accelerometer Range.
-/// See 2.11.12 Register (0x41) ACC_RANGE;
-/// BMI160 BST-BMI160-DS000-09 Rev 1.0 p. 59
+/// Accelerometer Range
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub enum AccelerometerRange {
     /// +- 2G
@@ -64,10 +62,9 @@ pub enum GyroscopePowerMode {
     FastStartUp,
 }
 
-/// 2.11.14 Register (0x43) GYR_RANGE
-/// BMI160 BST-BMI160-DS000-09 Rev 1.0 p. 61
+/// Gyroscope range
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
-pub enum GyroRange {
+pub enum GyroscopeRange {
     /// 16.4 LSB/°/s <-> 61.0 m°/s / LSB
     #[default]
     Scale2000 = 0b0000_0000,
@@ -81,14 +78,14 @@ pub enum GyroRange {
     Scale125 = 0b0000_0100,
 }
 
-impl GyroRange {
+impl GyroscopeRange {
     pub(crate) fn multiplier(self) -> f32 {
         match self {
-            GyroRange::Scale2000 => 1. / 16.4,
-            GyroRange::Scale1000 => 1. / 32.8,
-            GyroRange::Scale500 => 1. / 65.6,
-            GyroRange::Scale250 => 1. / 131.2,
-            GyroRange::Scale125 => 1. / 262.4,
+            GyroscopeRange::Scale2000 => 1. / 16.4,
+            GyroscopeRange::Scale1000 => 1. / 32.8,
+            GyroscopeRange::Scale500 => 1. / 65.6,
+            GyroscopeRange::Scale250 => 1. / 131.2,
+            GyroscopeRange::Scale125 => 1. / 262.4,
         }
     }
 }
