@@ -32,4 +32,4 @@ embedded-hal-mock = { version = "0.10.0", default-features = false, features = [
 lto = true
 
 [features]
-defmt = ["dep:defmt"]
+defmt-03 = ["dep:defmt"]

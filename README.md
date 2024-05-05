@@ -80,6 +80,10 @@ fn main() {
 }
 ```
 
+## Features
+
+- `defmt-03`: derives `defmt::Format` for public data types.
+
 ## Minimum Supported Rust Version (MSRV)
 
 This crate is guaranteed to compile on stable Rust 1.62 and up. It *might*

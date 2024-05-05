@@ -111,6 +111,10 @@
 //! }
 //! # }
 //! ```
+//!
+//! ## Features
+//!
+//! - `defmt-03`: derives `defmt::Format` for public data types.
 
 #![deny(unsafe_code, missing_docs)]
 #![no_std]
