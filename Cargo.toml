@@ -22,6 +22,7 @@ edition = "2021"
 
 [dependencies]
 embedded-hal = "1.0.0"
+defmt = { version = "0.3.6", optional = true }
 
 [dev-dependencies]
 linux-embedded-hal = "0.4.0"
@@ -29,3 +30,6 @@ embedded-hal-mock = { version = "0.10.0", default-features = false, features = [
 
 [profile.release]
 lto = true
+
+[features]
+defmt-03 = ["dep:defmt"]
