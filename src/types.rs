@@ -1,6 +1,6 @@
 /// All possible errors in this crate
 #[derive(Debug)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub enum Error<CommE> {
     /// I²C / SPI communication error
     Comm(CommE),
@@ -10,7 +10,7 @@ pub enum Error<CommE> {
 
 /// Sensor power mode
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub struct SensorPowerMode {
     /// Accelerometer power mode
     pub accel: AccelerometerPowerMode,
@@ -22,7 +22,7 @@ pub struct SensorPowerMode {
 
 /// Accelerometer power mode
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub enum AccelerometerPowerMode {
     /// Normal mode
     Normal,
@@ -34,7 +34,7 @@ pub enum AccelerometerPowerMode {
 
 /// Accelerometer Range
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub enum AccelerometerRange {
     /// +- 2G
     #[default]
@@ -57,7 +57,7 @@ impl AccelerometerRange {
 
 /// Gyroscope power mode
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub enum GyroscopePowerMode {
     /// Normal mode
     Normal,
@@ -69,7 +69,7 @@ pub enum GyroscopePowerMode {
 
 /// Gyroscope range
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub enum GyroscopeRange {
     /// 16.4 LSB/°/s <-> 61.0 m°/s / LSB
     #[default]
@@ -98,7 +98,7 @@ impl GyroscopeRange {
 
 /// Magnetometer power mode
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub enum MagnetometerPowerMode {
     /// Normal mode
     Normal,
@@ -110,7 +110,7 @@ pub enum MagnetometerPowerMode {
 
 /// Sensor status flags
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub struct Status {
     /// Accelerometer has data ready
     pub accel_data_ready: bool,
@@ -130,7 +130,7 @@ pub struct Status {
 
 /// Sensor data read selector
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub struct SensorSelector {
     pub(crate) accel: bool,
     pub(crate) gyro: bool,
@@ -194,7 +194,7 @@ impl Default for SensorSelector {
 
 /// Sensor data read selector
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub struct Sensor3DData {
     /// X axis data
     pub x: i16,
@@ -206,7 +206,7 @@ pub struct Sensor3DData {
 
 /// Magnetometer data
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub struct MagnetometerData {
     /// Axes data
     pub axes: Sensor3DData,
@@ -216,7 +216,7 @@ pub struct MagnetometerData {
 
 /// Sensor data read
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub struct Data {
     /// Accelerometer data (if selected)
     pub accel: Option<Sensor3DData>,
@@ -230,7 +230,7 @@ pub struct Data {
 
 /// Floating point 3D data
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub struct Sensor3DDataScaled {
     /// X axis data
     pub x: f32,
@@ -242,7 +242,7 @@ pub struct Sensor3DDataScaled {
 
 /// Sensor data read
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub struct DataScaled {
     /// Accelerometer data (if selected)
     pub accel: Option<Sensor3DDataScaled>,

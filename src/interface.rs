@@ -20,7 +20,7 @@ pub struct SpiInterface<SPI> {
 
 /// Possible slave addresses
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 pub enum SlaveAddr {
     /// Default slave address
     Default,
