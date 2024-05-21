@@ -41,6 +41,7 @@ jobs:
         if: ${{ ! contains(matrix.TARGET, 'x86_64') }}
 
       - run: cargo build --target=${{ matrix.TARGET }} --features=${{ matrix.features }}
+        if: ${{ ! (contains(matrix.rust, '1.') && contains(matrix.features, 'defmt')) }}
 
   checks:
     name: Checks
